@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 apt-get update -qy
-apt-get install -qqy php5-cli nginx postgresql postgresql-contrib libdbi-perl libdbd-pg-perl liblist-moreutils-perl libjson-perl libpq-dev php5-fpm
+apt-get install -qqy php5-cli nginx postgresql postgresql-contrib libdbi-perl libdbd-pg-perl liblist-moreutils-perl libjson-perl libpq-dev php5-fpm postgresql postgresql-contrib php5-pgsql
 
 # Set vi as default editor
 sudo rm /etc/alternatives/editor
