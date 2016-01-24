@@ -28,6 +28,10 @@ echo "Copy EngineX config files"
 cp /vagrant/nginx_conf/enabled/default /etc/nginx/sites-enabled/
 cp /vagrant/nginx_conf/available/default /etc/nginx/sites-available/
 
+echo "------------------------------------------------------------------------------"
+echo "Setup PHP"
+sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php5/fpm/php.ini
+
 echo "Restart services"
 service php5-fpm restart
 service nginx restart
