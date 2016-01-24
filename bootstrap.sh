@@ -35,3 +35,28 @@ sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php5/fpm/php.ini
 echo "Restart services"
 service php5-fpm restart
 service nginx restart
+
+echo "------------------------------------------------------------------------------"
+echo "Setup database"
+echo "------------------------------------------------------------------------------"
+echo "Create DB user admin"
+sudo -u postgres createuser vagrant;
+sudo -u postgres psql -c "ALTER USER vagrant SUPERUSER;"
+sudo -u postgres psql -c "ALTER USER vagrant CREATEUSER CREATEDB CREATEROLE REPLICATION;"
+sudo -u postgres psql -c "ALTER USER vagrant CREATEUSER CREATEDB CREATEROLE"
+sudo -u postgres psql -c "ALTER ROLE vagrant WITH PASSWORD '5hx1oaMU';"
+echo "------------------------------------------------------------------------------"
+echo "Create Database for KDBE"
+sudo -u vagrant psql -d postgres -c "create database pince;"
+sudo -u vagrant psql -d pince -c "create schema pince;"
+sudo -u vagrant psql -d pince -c "grant all on schema pince to vagrant;"
+echo "------------------------------------------------------------------------------"
+echo "Create Web user"
+sudo -u vagrant createuser webuser;
+sudo -u postgres psql -c "ALTER ROLE webuser WITH PASSWORD 't1tK0s';"
+sudo -u vagrant psql -d pince -c "set search_path to movies; grant all on schema pince to webuser;"
+echo "------------------------------------------------------------------------------"
+echo "Create database tables"
+sudo -u vagrant psql -d pince -c "create table pince.info(ID SERIAL PRIMARY KEY, TITLE TEXT NOT NULL, DETAIL TEXT NOT NULL);"
+sudo -u vagrant psql -d pince -c "create table pince.users(ID SERIAL PRIMARY KEY, LOGIN_NAME TEXT NOT NULL, ADMIN BOOLEAN DEFAULT FALSE, NAME TEXT NOT NULL, EMAIL VARCHAR(254) NOT NULL, PHONE TEXT NOT NULL, PASSWORD TEXT NOT NULL);"
+echo "------------------------------------------------------------------------------"
